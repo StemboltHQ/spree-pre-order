@@ -1,13 +1,14 @@
 SpreePreOrder
 =============
 
-Introduction goes here.
+This provides functionality to offer a product for pre-order, bill a deposit amount
+then at some later point, bill the remaining price when the item is ready to be
+shipped.
 
 
 Example
 =======
 
-Example goes here.
 
 Testing
 -------
@@ -18,4 +19,4 @@ Be sure to bundle your dependencies and then create a dummy test app for the spe
     $ bundle exec rake test_app
     $ bundle exec rspec spec
 
-Copyright (c) 2013 [name of extension creator], released under the New BSD License
+Copyright (c) 2013 FreeRunning Technologies, released under the New BSD License
