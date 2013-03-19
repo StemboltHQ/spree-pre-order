@@ -12,7 +12,7 @@ describe Spree::CheckoutController do
                              :payment? => true,
                              :insufficient_stock_lines => [],
                              :total => 49.99,
-                             :preorder_total => preorder_total,
+                             :initial_payment_total => initial_payment_total,
                              :coupon_code => nil).as_null_object
   end
 
@@ -23,7 +23,7 @@ describe Spree::CheckoutController do
     controller.stub(:params) { params }
   end
 
-  let(:preorder_total) { 0 }
+  let(:initial_payment_total) { 0 }
 
   describe ".object_params" do
     describe 'payments_attributes' do
@@ -33,23 +33,28 @@ describe Spree::CheckoutController do
       let(:payment_method_initial) { create :payment_method, type: "Spree::Gateway::GlobalCollectRecurring::Initial" }
       let!(:payment_method_additional) { create :payment_method, type: "Spree::Gateway::GlobalCollectRecurring::Additional" }
 
-      context 'when pre-order total is 0' do
+      before { spree_post :update }
+      subject { payments_attributes }
+
+      context 'when initial payment total matches the order total' do
+        let(:initial_payment_total) { 49.99 }
+        its(:count) { should == 1 }
+
         it 'updates the payments_attributes amount' do
-          spree_post :update
           payments_attributes.first[:amount].should == 49.99
         end
       end
 
-      context 'when pre-order total is > 0' do
-        let(:preorder_total) { 10 }
+      context 'when initial payment total is > 0, but less than the order total' do
+        let(:initial_payment_total) { 10 }
 
-        it 'creates a payment for the pre-order' do
-          spree_post :update
+        its(:count) { should == 2 }
+
+        it 'creates a payment for the initial payment' do
           payments_attributes.first[:amount].should == 10
         end
 
         it 'creates a payment for the remaining price' do
-          spree_post :update
           payments_attributes.last[:amount].should == 39.99
         end
       end
