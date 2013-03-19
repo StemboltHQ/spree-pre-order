@@ -1,9 +1,9 @@
 require 'spec_helper'
 
 describe Spree::PreorderPrice do
-  let(:price) { mock_model Spree::Price, currency: 'USD' }
-  let(:preorder_price) { Spree::PreorderPrice.new amount: 5 }
-  before { preorder_price.price = price }
+  let(:variant) { create :variant }
+  let(:price) { variant.default_price }
+  let(:preorder_price) { Spree::PreorderPrice.new amount: 5, price_id: price.id }
 
   describe '.money' do
     subject { preorder_price.money }
