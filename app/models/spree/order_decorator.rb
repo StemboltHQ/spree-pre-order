@@ -1,5 +1,5 @@
 Spree::Order.class_eval do
   def preorder_total
-    variants.sum { |variant| variant.preorder_amount(currency) }
+    line_items.map(&:preorder_amount).compact.inject(:+)
   end
 end
