@@ -20,7 +20,6 @@ module Spree
       undef_method :purchase
       undef_method :credit
       undef_method :capture
-      undef_method :void
     end
     class Initial < Base
       def purchase money, creditcard, options
