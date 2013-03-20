@@ -12,7 +12,7 @@ describe Spree::Gateway::GlobalCollectRecurring::Initial do
     let(:provider){ double('provider') }
     let(:money){ double('money') }
     let(:cc){ double('cc') }
-    let(:options){ {order_id: 123} }
+    let(:options){ {order_id: "r123-AB12NN11" } }
     before { subject.stub(provider: provider) }
     it "should call provider.multiple_initial_purchase" do
       provider.should_receive(:multiple_initial_purchase).with(money, cc, options)
@@ -36,10 +36,10 @@ describe Spree::Gateway::GlobalCollectRecurring::Additional do
     let(:status_params){ {'STATUS' => {'EFFORTID' => '1'}} }
 
     before { subject.stub(provider: provider) }
-    let(:options){ {order_id: 123} }
+    let(:options){ {order_id: "r123-AB12NN11" } }
 
     it "should call multiple_append_purchase with the next available effort_id" do
-      provider.should_receive(:multiple_append_purchase).with(money, hash_including(order_id: "123", effort_id: 2))
+      provider.should_receive(:multiple_append_purchase).with(money, hash_including(order_id: "1845775029", effort_id: 2))
       subject.capture money, nil, options
     end
 

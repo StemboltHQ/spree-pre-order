@@ -9,10 +9,11 @@ module Spree
         ActiveMerchant::Billing::GlobalCollectGateway
       end
 
-      # Stolen from active merchant
+      # Spree uses an order id format of "{Spree::Order.number}-{Spree::Payment.identifier}"
+      # This creates a format such as the following R884071163-X8EHS5PH
+      # Global Collect requires orders to be 10 characters, integers only...this makes it happen.
       def format_order_id order_id
-        order_id = order_id.to_s.gsub(/-.*/, '')
-        order_id.gsub(/[^\d]/, '')[0...10]
+        Zlib::crc32(order_id).to_s
       end
 
       # disable normal payment methods
