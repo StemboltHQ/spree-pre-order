@@ -39,7 +39,7 @@ module Spree
     class Additional < Base
       # capture is the option presented from the spree admin payment interface
       def capture money, creditcard, options
-        order_id = format_order_id(options.fetch(:order_id))
+        order_id = options.fetch(:order_id)
         order_status = provider.status(order_id)
         last_effort_id = Integer(order_status.params['STATUS']['EFFORTID'], 10)
         raise "need to make an initial payment before additional variable_recurring payments" unless last_effort_id > 0
