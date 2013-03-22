@@ -11,7 +11,8 @@ describe Spree::CheckoutController do
                              :update_attributes => true,
                              :payment? => true,
                              :insufficient_stock_lines => [],
-                             :total => 49.99,
+                             :item_total => 49.99,
+                             :total => 54.99,
                              :initial_payment_total => initial_payment_total,
                              :coupon_code => nil).as_null_object
   end
@@ -36,12 +37,12 @@ describe Spree::CheckoutController do
       before { spree_post :update }
       subject { payments_attributes }
 
-      context 'when initial payment total matches the order total' do
+      context 'when initial payment total matches the order item total' do
         let(:initial_payment_total) { 49.99 }
         its(:count) { should == 1 }
 
         it 'updates the payments_attributes amount' do
-          payments_attributes.first[:amount].should == 49.99
+          payments_attributes.first[:amount].should == 54.99
         end
       end
 
@@ -55,7 +56,7 @@ describe Spree::CheckoutController do
         end
 
         it 'creates a payment for the remaining price' do
-          payments_attributes.last[:amount].should == 39.99
+          payments_attributes.last[:amount].should == 44.99
         end
       end
     end
