@@ -19,7 +19,6 @@ module Spree
       # disable normal payment methods
       undef_method :authorize
       undef_method :purchase
-      undef_method :credit
       undef_method :capture
     end
     class Initial < Base
