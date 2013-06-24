@@ -46,6 +46,16 @@ describe Spree::CheckoutController do
         end
       end
 
+      context 'when payment method doesnt support recurring' do
+        let(:payment_method_initial) { create :payment_method, type: "Spree::PaymentMethod::Check" }
+        let(:initial_payment_total) { 10 }
+        its(:count) { should == 1 }
+
+        it 'updates the payments_attributes amount' do
+          payments_attributes.first[:amount].should == 54.99
+        end
+      end
+
       context 'when initial payment total is > 0, but less than the order total' do
         let(:initial_payment_total) { 10 }
 

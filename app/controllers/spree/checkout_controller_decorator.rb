@@ -8,9 +8,9 @@ Spree::CheckoutController.class_eval do
       end
       if (params[:order][:payments_attributes])
         # Start changed code
-        if @order.initial_payment_total != @order.item_total
-          payment_method = Spree::PaymentMethod.find(params[:order][:payments_attributes].first[:payment_method_id])
-          raise "PaymentMethod does not support recurring payments" unless payment_method.respond_to?(:recurring_payment_method)
+        payment_method = Spree::PaymentMethod.find(params[:order][:payments_attributes].first[:payment_method_id])
+        if @order.initial_payment_total != @order.item_total && payment_method.respond_to?(:recurring_payment_method)
+          # initial payment specified and payment method supports recurring
           params[:order][:payments_attributes] << params[:order][:payments_attributes].first.clone
           params[:order][:payments_attributes].first[:amount] = @order.initial_payment_total
           params[:order][:payments_attributes].last[:amount] = (@order.total - @order.initial_payment_total)
